@@ -9,31 +9,31 @@ A powerful, user-friendly film budgeting application built with Swift and SwiftU
 ## Features
 
 ### Core Budgeting
-- ✅ **Three-Level Budget Hierarchy** - Top Sheet → Categories → Unit Breakdowns (just like Movie Magic)
-- ✅ **Unit Calculator** - Click any estimated/actual value to open a detailed calculator
+-  **Three-Level Budget Hierarchy** - Top Sheet → Categories → Unit Breakdowns (just like Movie Magic)
+-  **Unit Calculator** - Click any estimated/actual value to open a detailed calculator
   - Enter Amt × Units × Rate for precise calculations
   - Separate calculators for Estimated and Actual costs
-- ✅ **Automatic Contingency** - Always calculates 10% of subtotal automatically
-- ✅ **19 Industry-Standard Categories** - Pre-loaded with indie film budget structure
-- ✅ **Duplicate Line Items** - Right-click any line item to duplicate (copies all values and units)
-- ✅ **Category Percentages** - See what % of budget each category represents
-- ✅ **Notes Support** - Add detailed notes to any line item
+-  **Automatic Contingency** - Always calculates 10% of subtotal automatically
+-  **19 Industry-Standard Categories** - Pre-loaded with indie film budget structure
+-  **Duplicate Line Items** - Right-click any line item to duplicate (copies all values and units)
+-  **Category Percentages** - See what % of budget each category represents
+-  **Notes Support** - Add detailed notes to any line item
 
 ### Professional Output
-- ✅ **PDF Export** - Generate professional budget PDFs with:
+-  **PDF Export** - Generate professional budget PDFs with:
   - Complete top sheet with all categories
   - Detail pages for each category
   - Subtotal, Contingency (10%), and Grand Total
   - "Prepared By" field for your name
   - Professional formatting ready for investors/producers
-- ✅ **Project Save/Load** - Save budgets as `.cinespend` files
-- ✅ **Auto-Save Modified Date** - Tracks last modification time
+-  **Project Save/Load** - Save budgets as `.cinespend` files
+-  **Auto-Save Modified Date** - Tracks last modification time
 
 ### User Experience
-- ✅ **Dark/Light Mode** - Full appearance customization
-- ✅ **Split View Interface** - Category list on left, details on right
-- ✅ **Keyboard Shortcuts** - Fast workflow with ⌘N, ⌘S, ⌘O, ⌘⇧E
-- ✅ **Clean, Modern UI** - Native macOS design with SwiftUI
+-  **Dark/Light Mode** - Full appearance customization
+-  **Split View Interface** - Category list on left, details on right
+-  **Keyboard Shortcuts** - Fast workflow with ⌘N, ⌘S, ⌘O, ⌘⇧E
+-  **Clean, Modern UI** - Native macOS design with SwiftUI
 
 ## Installation
 
@@ -348,7 +348,7 @@ This is an independent open-source project. Contributions, suggestions, and feed
 
 ## License
 
-MIT License - Free for personal and commercial use
+GPL-3.0 License - Free for personal and commercial use
 
 ## Credits
 
