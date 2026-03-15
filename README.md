@@ -2,6 +2,8 @@
 
 A powerful, user-friendly film budgeting application built with Swift and SwiftUI for macOS. Designed as an affordable alternative to Movie Magic Budgeting for independent filmmakers and production companies.
 
+Video Demo: https://www.youtube.com/watch?v=vkCAtPOgbKs
+
 ![macOS](https://img.shields.io/badge/macOS-12.0+-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.5+-orange)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-3.0+-green)
