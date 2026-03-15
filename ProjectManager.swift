@@ -98,19 +98,28 @@ class ProjectManager: ObservableObject {
             panel.nameFieldStringValue = "\(project.name) - Budget.pdf"
             panel.canCreateDirectories = true
             
+            // Add accessory view with checkbox for unit breakdowns
+            let accessoryView = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: 30))
+            let checkbox = NSButton(checkboxWithTitle: "Include unit breakdowns in detail pages", target: nil, action: nil)
+            checkbox.frame = NSRect(x: 0, y: 0, width: 300, height: 30)
+            checkbox.state = .on  // Default to checked
+            accessoryView.addSubview(checkbox)
+            panel.accessoryView = accessoryView
+            
             panel.begin { [weak self] response in
                 guard let self = self else { return }
                 if response == .OK, let url = panel.url {
+                    let includeUnitBreakdowns = (checkbox.state == .on)
                     // Generate PDF on background thread
                     DispatchQueue.global(qos: .userInitiated).async {
-                        self.generatePDF(for: project, to: url)
+                        self.generatePDF(for: project, to: url, includeUnitBreakdowns: includeUnitBreakdowns)
                     }
                 }
             }
         }
     }
     
-    private func generatePDF(for project: Project, to url: URL) {
+    private func generatePDF(for project: Project, to url: URL, includeUnitBreakdowns: Bool = true) {
         let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
         
         // Create PDF context with proper initialization
@@ -129,7 +138,7 @@ class ProjectManager: ObservableObject {
         // Detail Pages
         for category in project.categories {
             pdfContext.beginPDFPage(nil)
-            drawCategoryDetail(category: category, projectName: project.name, in: pdfContext, pageSize: pageRect.size)
+            drawCategoryDetail(category: category, projectName: project.name, in: pdfContext, pageSize: pageRect.size, includeUnitBreakdowns: includeUnitBreakdowns)
             pdfContext.endPDFPage()
         }
         
@@ -218,7 +227,7 @@ class ProjectManager: ObservableObject {
         
         y -= 5
         drawLine(from: CGPoint(x: margin, y: y), to: CGPoint(x: pageSize.width - margin, y: y), in: context, width: 2)
-        y -= 12
+        y -= 18  // Increased spacing before TOTAL row
         
         // Grand Total
         drawText("TOTAL", at: CGPoint(x: margin + 60, y: y), fontSize: 11, bold: true, in: context)
@@ -227,7 +236,7 @@ class ProjectManager: ObservableObject {
         drawText(formatCurrency(project.totalRemaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 11, bold: true, in: context)
     }
     
-    private func drawCategoryDetail(category: BudgetCategory, projectName: String, in context: CGContext, pageSize: CGSize) {
+    private func drawCategoryDetail(category: BudgetCategory, projectName: String, in context: CGContext, pageSize: CGSize, includeUnitBreakdowns: Bool) {
         let margin: CGFloat = 50
         var y: CGFloat = pageSize.height - margin
         
@@ -259,6 +268,24 @@ class ProjectManager: ObservableObject {
             drawText(formatCurrency(item.actual), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
             drawText(formatCurrency(item.remaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)
             y -= 15
+            
+            // Unit breakdowns (if enabled and present)
+            if includeUnitBreakdowns && !item.units.isEmpty && y > margin + 80 {
+                for unit in item.units {
+                    if y < margin + 50 { break }
+                    
+                    // Format: "  Camera Body: 1 × 10 days × $500 = $5,000"
+                    let amtStr = unit.amount == floor(unit.amount) ? String(format: "%.0f", unit.amount) : String(format: "%.1f", unit.amount)
+                    let unitsStr = unit.units == floor(unit.units) ? String(format: "%.0f", unit.units) : String(format: "%.1f", unit.units)
+                    let rateStr = formatCurrency(unit.rate)
+                    let totalStr = formatCurrency(unit.amount * unit.units * unit.rate)
+                    
+                    let unitLine = "    \(unit.description): \(amtStr) × \(unitsStr) × \(rateStr) = \(totalStr)"
+                    let unitHeight = drawText(unitLine, at: CGPoint(x: margin + 10, y: y), fontSize: 8, in: context)
+                    y -= (unitHeight + 3)
+                }
+                y -= 5  // Extra spacing after unit breakdowns
+            }
             
             if !item.notes.isEmpty && y > margin + 50 {
                 let notesHeight = drawText("  Note: \(item.notes)", at: CGPoint(x: margin + 10, y: y), fontSize: 9, in: context)
