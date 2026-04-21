@@ -54,7 +54,7 @@ struct ContentView: View {
                             .transition(.opacity)
                         }
                     }
-                    .frame(minWidth: 500, idealWidth: 450, maxWidth: .infinity)
+                    .frame(minWidth: 350, idealWidth: 450, maxWidth: .infinity)
                 }
             } else {
                 WelcomeView()
@@ -118,3 +118,4 @@ struct CategoryDetailPlaceholder: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
+
