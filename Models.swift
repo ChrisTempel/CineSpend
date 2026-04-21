@@ -7,18 +7,64 @@
 
 import Foundation
 
+// MARK: - Currency
+enum Currency: String, Codable, CaseIterable {
+    case usd = "USD"
+    case gbp = "GBP"
+    case eur = "EUR"
+    case cad = "CAD"
+    case aud = "AUD"
+    case nzd = "NZD"
+    case inr = "INR"
+    case krw = "KRW"
+    case jpy = "JPY"
+    case mxn = "MXN"
+    
+    var symbol: String {
+        switch self {
+        case .usd, .cad, .aud, .nzd, .mxn: return "$"
+        case .gbp: return "£"
+        case .eur: return "€"
+        case .inr: return "₹"
+        case .krw: return "₩"
+        case .jpy: return "¥"
+        }
+    }
+    
+    var displayName: String {
+        switch self {
+        case .usd: return "$ USD - US Dollar"
+        case .gbp: return "£ GBP - British Pound"
+        case .eur: return "€ EUR - Euro"
+        case .cad: return "$ CAD - Canadian Dollar"
+        case .aud: return "$ AUD - Australian Dollar"
+        case .nzd: return "$ NZD - New Zealand Dollar"
+        case .inr: return "₹ INR - Indian Rupee"
+        case .krw: return "₩ KRW - South Korean Won"
+        case .jpy: return "¥ JPY - Japanese Yen"
+        case .mxn: return "$ MXN - Mexican Peso"
+        }
+    }
+    
+    var code: String {
+        rawValue
+    }
+}
+
 // MARK: - Project
 struct Project: Codable, Identifiable {
     var id = UUID()
     var name: String
+    var currency: Currency = .usd
     var preparedBy: String = ""
     var contingencyPercentage: Double = 10.0
     var dateCreated: Date
     var dateModified: Date
     var categories: [BudgetCategory]
     
-    init(name: String) {
+    init(name: String, currency: Currency = .usd) {
         self.name = name
+        self.currency = currency
         self.preparedBy = ""
         self.contingencyPercentage = 10.0
         self.dateCreated = Date()

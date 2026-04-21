@@ -48,7 +48,8 @@ struct ContentView: View {
                                             refreshTrigger = UUID()
                                         }
                                     }
-                                )
+                                ),
+                                currency: project.currency
                             )
                             .transition(.opacity)
                         }

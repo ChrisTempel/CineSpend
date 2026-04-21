@@ -108,6 +108,7 @@ struct TopSheetView: View {
                         if project.categories[index].accountNumber != "19000" {
                             CategoryRow(
                                 category: $project.categories[index],
+                                currency: project.currency,
                                 totalBudget: subtotalEstimated,
                                 isSelected: project.categories[index].id == selectedCategoryID,
                                 onSelect: {
@@ -223,13 +224,13 @@ struct TopSheetView: View {
             .padding()
             .background(Color(NSColor.controlBackgroundColor))
         }
-        .onChange(of: project.contingencyPercentage) { _ in
+        .onChange(of: project.contingencyPercentage) {
             autoUpdateContingency()
         }
-        .onChange(of: updateTrigger) { _ in
+        .onChange(of: updateTrigger) {
             autoUpdateContingency()
         }
-        .onChange(of: subtotalEstimated) { newValue in
+        .onChange(of: subtotalEstimated) {
             autoUpdateContingency()
         }
         .onAppear {
@@ -289,14 +290,16 @@ struct TopSheetView: View {
     private func formatCurrency(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: value)) ?? "$0.00"
+        formatter.currencyCode = project.currency.code
+        formatter.currencySymbol = project.currency.symbol
+        return formatter.string(from: NSNumber(value: value)) ?? "\(project.currency.symbol)0.00"
     }
 }
 
 // MARK: - Category Row
 struct CategoryRow: View {
     @Binding var category: BudgetCategory
+    let currency: Currency
     let totalBudget: Double
     let isSelected: Bool
     let onSelect: () -> Void
@@ -346,7 +349,8 @@ struct CategoryRow: View {
     private func formatCurrency(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: value)) ?? "$0.00"
+        formatter.currencyCode = currency.code
+        formatter.currencySymbol = currency.symbol
+        return formatter.string(from: NSNumber(value: value)) ?? "\(currency.symbol)0.00"
     }
 }

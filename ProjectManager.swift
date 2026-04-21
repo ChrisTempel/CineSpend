@@ -17,9 +17,58 @@ class ProjectManager: ObservableObject {
     // MARK: - Project Management
     
     func createNewProject() {
-        let newProject = Project(name: "Untitled Film Budget")
-        currentProject = newProject
-        currentFileURL = nil
+        DispatchQueue.main.async {
+            // Create alert for project setup
+            let alert = NSAlert()
+            alert.messageText = "New Film Budget"
+            alert.informativeText = "Choose your project currency:"
+            alert.alertStyle = .informational
+            
+            // Create accessory view with currency picker
+            let accessoryView = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: 60))
+            
+            // Currency label
+            let currencyLabel = NSTextField(labelWithString: "Currency:")
+            currencyLabel.frame = NSRect(x: 0, y: 30, width: 80, height: 20)
+            accessoryView.addSubview(currencyLabel)
+            
+            // Currency popup
+            let currencyPopup = NSPopUpButton(frame: NSRect(x: 85, y: 28, width: 215, height: 25))
+            for currency in Currency.allCases {
+                currencyPopup.addItem(withTitle: currency.displayName)
+            }
+            currencyPopup.selectItem(at: 0) // Default to USD
+            accessoryView.addSubview(currencyPopup)
+            
+            // Project name label
+            let nameLabel = NSTextField(labelWithString: "Project Name:")
+            nameLabel.frame = NSRect(x: 0, y: 0, width: 80, height: 20)
+            accessoryView.addSubview(nameLabel)
+            
+            // Project name field
+            let nameField = NSTextField(frame: NSRect(x: 85, y: 0, width: 215, height: 22))
+            nameField.stringValue = "Untitled Film Budget"
+            nameField.placeholderString = "Enter project name"
+            accessoryView.addSubview(nameField)
+            
+            alert.accessoryView = accessoryView
+            alert.addButton(withTitle: "Create")
+            alert.addButton(withTitle: "Cancel")
+            
+            // Make name field first responder
+            alert.window.initialFirstResponder = nameField
+            
+            let response = alert.runModal()
+            
+            if response == .alertFirstButtonReturn {
+                let selectedCurrency = Currency.allCases[currencyPopup.indexOfSelectedItem]
+                let projectName = nameField.stringValue.isEmpty ? "Untitled Film Budget" : nameField.stringValue
+                
+                let newProject = Project(name: projectName, currency: selectedCurrency)
+                self.currentProject = newProject
+                self.currentFileURL = nil
+            }
+        }
     }
     
     func saveCurrentProject() {
@@ -138,7 +187,7 @@ class ProjectManager: ObservableObject {
         // Detail Pages
         for category in project.categories {
             pdfContext.beginPDFPage(nil)
-            drawCategoryDetail(category: category, projectName: project.name, in: pdfContext, pageSize: pageRect.size, includeUnitBreakdowns: includeUnitBreakdowns)
+            drawCategoryDetail(category: category, projectName: project.name, currency: project.currency, in: pdfContext, pageSize: pageRect.size, includeUnitBreakdowns: includeUnitBreakdowns)
             pdfContext.endPDFPage()
         }
         
@@ -194,9 +243,9 @@ class ProjectManager: ObservableObject {
             
             drawText(category.accountNumber, at: CGPoint(x: margin, y: y), fontSize: 10, in: context)
             drawText(category.name, at: CGPoint(x: margin + 60, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(category.totalEstimated), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(category.totalActual), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(category.totalRemaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(category.totalEstimated, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(category.totalActual, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(category.totalRemaining, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)
             y -= 15
         }
         
@@ -206,9 +255,9 @@ class ProjectManager: ObservableObject {
         
         // Subtotal
         drawText("SUBTOTAL", at: CGPoint(x: margin + 60, y: y), fontSize: 10, bold: true, in: context)
-        drawText(formatCurrency(subtotalEstimated), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, bold: true, in: context)
-        drawText(formatCurrency(subtotalActual), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, bold: true, in: context)
-        drawText(formatCurrency(subtotalRemaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, bold: true, in: context)
+        drawText(formatCurrency(subtotalEstimated, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, bold: true, in: context)
+        drawText(formatCurrency(subtotalActual, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, bold: true, in: context)
+        drawText(formatCurrency(subtotalRemaining, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, bold: true, in: context)
         y -= 15
         
         // Contingency (dynamic %)
@@ -219,9 +268,9 @@ class ProjectManager: ObservableObject {
             
             drawText("19000", at: CGPoint(x: margin, y: y), fontSize: 10, in: context)
             drawText("Contingency (\(percentText)%)", at: CGPoint(x: margin + 60, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(contingency.totalEstimated), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(contingency.totalActual), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(contingency.totalRemaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(contingency.totalEstimated, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(contingency.totalActual, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(contingency.totalRemaining, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)
             y -= 15
         }
         
@@ -231,12 +280,12 @@ class ProjectManager: ObservableObject {
         
         // Grand Total
         drawText("TOTAL", at: CGPoint(x: margin + 60, y: y), fontSize: 11, bold: true, in: context)
-        drawText(formatCurrency(project.totalEstimated), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 11, bold: true, in: context)
-        drawText(formatCurrency(project.totalActual), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 11, bold: true, in: context)
-        drawText(formatCurrency(project.totalRemaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 11, bold: true, in: context)
+        drawText(formatCurrency(project.totalEstimated, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 11, bold: true, in: context)
+        drawText(formatCurrency(project.totalActual, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 11, bold: true, in: context)
+        drawText(formatCurrency(project.totalRemaining, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 11, bold: true, in: context)
     }
     
-    private func drawCategoryDetail(category: BudgetCategory, projectName: String, in context: CGContext, pageSize: CGSize, includeUnitBreakdowns: Bool) {
+    private func drawCategoryDetail(category: BudgetCategory, projectName: String, currency: Currency, in context: CGContext, pageSize: CGSize, includeUnitBreakdowns: Bool) {
         let margin: CGFloat = 50
         var y: CGFloat = pageSize.height - margin
         
@@ -264,9 +313,9 @@ class ProjectManager: ObservableObject {
             if y < margin + 50 { break }
             
             drawText(item.description, at: CGPoint(x: margin, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(item.estimated), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(item.actual), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
-            drawText(formatCurrency(item.remaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(item.estimated, currency: currency), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(item.actual, currency: currency), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
+            drawText(formatCurrency(item.remaining, currency: currency), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)
             y -= 15
             
             // Unit breakdowns (if enabled and present)
@@ -277,8 +326,8 @@ class ProjectManager: ObservableObject {
                     // Format: "  Camera Body: 1 × 10 days × $500 = $5,000"
                     let amtStr = unit.amount == floor(unit.amount) ? String(format: "%.0f", unit.amount) : String(format: "%.1f", unit.amount)
                     let unitsStr = unit.units == floor(unit.units) ? String(format: "%.0f", unit.units) : String(format: "%.1f", unit.units)
-                    let rateStr = formatCurrency(unit.rate)
-                    let totalStr = formatCurrency(unit.amount * unit.units * unit.rate)
+                    let rateStr = formatCurrency(unit.rate, currency: currency)
+                    let totalStr = formatCurrency(unit.amount * unit.units * unit.rate, currency: currency)
                     
                     let unitLine = "    \(unit.description): \(amtStr) × \(unitsStr) × \(rateStr) = \(totalStr)"
                     let unitHeight = drawText(unitLine, at: CGPoint(x: margin + 10, y: y), fontSize: 8, in: context)
@@ -299,9 +348,9 @@ class ProjectManager: ObservableObject {
         
         // Category total
         drawText("CATEGORY TOTAL", at: CGPoint(x: margin, y: y), fontSize: 11, bold: true, in: context)
-        drawText(formatCurrency(category.totalEstimated), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 11, bold: true, in: context)
-        drawText(formatCurrency(category.totalActual), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 11, bold: true, in: context)
-        drawText(formatCurrency(category.totalRemaining), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 11, bold: true, in: context)
+        drawText(formatCurrency(category.totalEstimated, currency: currency), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 11, bold: true, in: context)
+        drawText(formatCurrency(category.totalActual, currency: currency), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 11, bold: true, in: context)
+        drawText(formatCurrency(category.totalRemaining, currency: currency), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 11, bold: true, in: context)
     }
     
     // MARK: - PDF Drawing Helpers
@@ -345,10 +394,11 @@ class ProjectManager: ObservableObject {
         context.strokePath()
     }
     
-    private func formatCurrency(_ value: Double) -> String {
+    private func formatCurrency(_ value: Double, currency: Currency) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: value)) ?? "$0.00"
+        formatter.currencyCode = currency.code
+        formatter.currencySymbol = currency.symbol
+        return formatter.string(from: NSNumber(value: value)) ?? "\(currency.symbol)0.00"
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategoryDetailView: View {
     @Binding var category: BudgetCategory
+    let currency: Currency
     
     var body: some View {
         VStack(spacing: 0) {
@@ -73,6 +74,7 @@ struct CategoryDetailView: View {
                     ForEach(category.lineItems.indices, id: \.self) { index in
                         LineItemRow(
                             lineItem: $category.lineItems[index],
+                            currency: currency,
                             onDelete: {
                                 deleteLineItem(at: index)
                             },
@@ -144,14 +146,16 @@ struct CategoryDetailView: View {
     private func formatCurrency(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: value)) ?? "$0.00"
+        formatter.currencyCode = currency.code
+        formatter.currencySymbol = currency.symbol
+        return formatter.string(from: NSNumber(value: value)) ?? "\(currency.symbol)0.00"
     }
 }
 
 // MARK: - Line Item Row
 struct LineItemRow: View {
     @Binding var lineItem: LineItem
+    let currency: Currency
     let onDelete: () -> Void
     let onDuplicate: () -> Void
     @State private var showNotesField = false
@@ -241,6 +245,7 @@ struct LineItemRow: View {
         .sheet(isPresented: $showEstimatedCalculator) {
             UnitCalculatorView(
                 lineItem: $lineItem,
+                currency: currency,
                 isPresented: $showEstimatedCalculator,
                 mode: .estimated
             )
@@ -248,6 +253,7 @@ struct LineItemRow: View {
         .sheet(isPresented: $showActualCalculator) {
             UnitCalculatorView(
                 lineItem: $lineItem,
+                currency: currency,
                 isPresented: $showActualCalculator,
                 mode: .actual
             )
@@ -257,14 +263,16 @@ struct LineItemRow: View {
     private func formatCurrency(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: value)) ?? "$0.00"
+        formatter.currencyCode = currency.code
+        formatter.currencySymbol = currency.symbol
+        return formatter.string(from: NSNumber(value: value)) ?? "\(currency.symbol)0.00"
     }
 }
 
 // MARK: - Unit Calculator View
 struct UnitCalculatorView: View {
     @Binding var lineItem: LineItem
+    let currency: Currency
     @Binding var isPresented: Bool
     let mode: CalculatorMode
     
@@ -345,6 +353,7 @@ struct UnitCalculatorView: View {
                     ForEach(lineItem.units.indices, id: \.self) { index in
                         UnitRow(
                             unit: $lineItem.units[index],
+                            currency: currency,
                             mode: mode,
                             onDelete: {
                                 lineItem.units.remove(at: index)
@@ -418,14 +427,16 @@ struct UnitCalculatorView: View {
     private func formatCurrency(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: value)) ?? "$0.00"
+        formatter.currencyCode = currency.code
+        formatter.currencySymbol = currency.symbol
+        return formatter.string(from: NSNumber(value: value)) ?? "\(currency.symbol)0.00"
     }
 }
 
 // MARK: - Unit Row
 struct UnitRow: View {
     @Binding var unit: UnitBreakdown
+    let currency: Currency
     let mode: UnitCalculatorView.CalculatorMode
     let onDelete: () -> Void
     
@@ -486,7 +497,8 @@ struct UnitRow: View {
     private func formatCurrency(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: value)) ?? "$0.00"
+        formatter.currencyCode = currency.code
+        formatter.currencySymbol = currency.symbol
+        return formatter.string(from: NSNumber(value: value)) ?? "\(currency.symbol)0.00"
     }
 }
