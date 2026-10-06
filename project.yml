@@ -1,0 +1,57 @@
+name: CineSpend
+options:
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  CineSpend:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: .
+        excludes:
+          - "*.md"
+          - "*.zip"
+          - "*.png"
+          - "*.cinespend"
+          - "*.csv"
+          - "*.xlsx"
+          - "docs"
+          - "docs/**"
+          - ".gitignore"
+          - "LICENSE"
+          - "project.yml"
+          - "CineSpend.xcodeproj"
+          - "CineSpend.xcodeproj/**"
+          - ".git"
+          - ".git/**"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: PyroStudios.CineSpend
+        PRODUCT_NAME: CineSpend
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: CineSpend
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.finance
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        CODE_SIGN_ENTITLEMENTS: CineSpend.entitlements
+
+schemes:
+  CineSpend:
+    build:
+      targets:
+        CineSpend: all
+    run:
+      config: Debug

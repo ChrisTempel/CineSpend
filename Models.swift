@@ -95,19 +95,68 @@ struct BudgetCategory: Codable, Identifiable {
     var accountNumber: String
     var name: String
     var lineItems: [LineItem]
-    
-    var totalEstimated: Double {
+
+    // Marks the one category that holds the whole-project contingency (see
+    // Project.contingencyPercentage). Its accountNumber and name are ordinary,
+    // freely editable fields like any other category's - this flag, not the
+    // account number, is what the app actually uses to find it.
+    var isProjectContingency: Bool = false
+
+    // An internal contingency scoped to this category alone (e.g. a VFX account
+    // that wants its own buffer on top of its line items). nil = disabled. Adds
+    // directly to this category's own totalEstimated; unlike a normal line item,
+    // it isn't itemized and doesn't affect totalActual.
+    var contingencyPercentage: Double? = nil
+
+    // Custom decoding so isProjectContingency (added after this format shipped) is
+    // treated as false when absent, instead of failing to decode every file that
+    // predates it - unlike most fields in this app's model, this one is meant to be
+    // forward-compatible with files that don't have it yet.
+    enum CodingKeys: String, CodingKey {
+        case id, accountNumber, name, lineItems, isProjectContingency, contingencyPercentage
+    }
+
+    init(id: UUID = UUID(), accountNumber: String, name: String, lineItems: [LineItem],
+         isProjectContingency: Bool = false, contingencyPercentage: Double? = nil) {
+        self.id = id
+        self.accountNumber = accountNumber
+        self.name = name
+        self.lineItems = lineItems
+        self.isProjectContingency = isProjectContingency
+        self.contingencyPercentage = contingencyPercentage
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        accountNumber = try container.decode(String.self, forKey: .accountNumber)
+        name = try container.decode(String.self, forKey: .name)
+        lineItems = try container.decode([LineItem].self, forKey: .lineItems)
+        isProjectContingency = try container.decodeIfPresent(Bool.self, forKey: .isProjectContingency) ?? false
+        contingencyPercentage = try container.decodeIfPresent(Double.self, forKey: .contingencyPercentage)
+    }
+
+    var lineItemsSubtotalEstimated: Double {
         lineItems.reduce(0) { $0 + $1.estimated }
     }
-    
+
+    var contingencyEstimated: Double {
+        guard let contingencyPercentage else { return 0 }
+        return lineItemsSubtotalEstimated * (contingencyPercentage / 100)
+    }
+
+    var totalEstimated: Double {
+        lineItemsSubtotalEstimated + contingencyEstimated
+    }
+
     var totalActual: Double {
         lineItems.reduce(0) { $0 + $1.actual }
     }
-    
+
     var totalRemaining: Double {
         totalEstimated - totalActual
     }
-    
+
     // Default indie film budget categories
     static func defaultCategories() -> [BudgetCategory] {
         return [
@@ -217,7 +266,7 @@ struct BudgetCategory: Codable, Identifiable {
             ]),
             BudgetCategory(accountNumber: "19000", name: "Contingency", lineItems: [
                 LineItem(description: "Contingency (10%)", estimated: 0, actual: 0)
-            ])
+            ], isProjectContingency: true)
         ]
     }
 }
@@ -230,6 +279,13 @@ struct LineItem: Codable, Identifiable {
     var actual: Double
     var notes: String = ""
     var units: [UnitBreakdown] = []
+    // Whether this line item's unit breakdown preview is collapsed in Category
+    // Detail. Opt-out: false (shown) by default, and saved with the file.
+    var breakdownCollapsed: Bool = false
+
+    enum CodingKeys: String, CodingKey {
+        case id, description, estimated, actual, notes, units, breakdownCollapsed
+    }
     
     var remaining: Double {
         estimated - actual
@@ -243,6 +299,22 @@ struct LineItem: Codable, Identifiable {
     // Calculate actual from units if units exist
     var calculatedActual: Double {
         units.reduce(0) { $0 + ($1.amount * $1.units * $1.actualRate) }
+    }
+}
+
+// Custom decoding lives in an extension so LineItem keeps its memberwise
+// initializer. breakdownCollapsed was added after the format shipped, so it's
+// treated as false (expanded) when absent; every other field decodes as before.
+extension LineItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        description = try container.decode(String.self, forKey: .description)
+        estimated = try container.decode(Double.self, forKey: .estimated)
+        actual = try container.decode(Double.self, forKey: .actual)
+        notes = try container.decode(String.self, forKey: .notes)
+        units = try container.decode([UnitBreakdown].self, forKey: .units)
+        breakdownCollapsed = try container.decodeIfPresent(Bool.self, forKey: .breakdownCollapsed) ?? false
     }
 }
 

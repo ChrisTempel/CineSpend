@@ -1,0 +1,1104 @@
+{
+  "id": "03C98060-83DF-4004-91F1-A202DE666D52",
+  "name": "Northbound Sample Feature",
+  "currency": "USD",
+  "preparedBy": "Paul Santagada",
+  "contingencyPercentage": 10.0,
+  "dateCreated": 801997200.0,
+  "dateModified": 807708600.0,
+  "categories": [
+    {
+      "id": "1E396631-F9BC-46E9-A89E-23606A95823C",
+      "accountNumber": "1000",
+      "name": "Story & Rights",
+      "lineItems": [
+        {
+          "id": "2E571B3D-8391-4056-9DB1-CFAA69CC7768",
+          "description": "Story Rights Purchase",
+          "estimated": 5000.0,
+          "actual": 5000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "D091BD8A-DAA1-4F8B-97FD-B218827A70BB",
+          "description": "Screenplay (Writer Fee)",
+          "estimated": 15000.0,
+          "actual": 15000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "54783D68-E7FD-43F2-A857-98A55B4E82D5",
+          "description": "Script Revisions & Polish",
+          "estimated": 3000.0,
+          "actual": 3000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "C09BD318-3CED-4545-9BC0-114EF8E7CFEA",
+          "description": "Copyright Registration & Clearance",
+          "estimated": 500.0,
+          "actual": 500.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "38953DB0-3010-4DB9-AD8D-6AA58E5CDE75",
+      "accountNumber": "2000",
+      "name": "Producers Unit",
+      "lineItems": [
+        {
+          "id": "4E63B4B2-B8DF-4E38-8F1E-969BEC36A2B5",
+          "description": "Executive Producer",
+          "estimated": 10000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "ACFCAFFF-A904-47BA-A09A-98B0116BA953",
+          "description": "Producer",
+          "estimated": 40000.0,
+          "actual": 20000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "B2733F79-43F7-463C-8A3E-E6D017A5215E",
+          "description": "Line Producer",
+          "estimated": 30000.0,
+          "actual": 15000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "7F79AEB3-04EB-4CE3-A333-DF2D36E6B914",
+          "description": "Production Auditor / Accountant",
+          "estimated": 12000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "AC8D885B-4E43-4F72-97FD-996961D03E24",
+          "description": "Casting Director",
+          "estimated": 8000.0,
+          "actual": 8000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "1EF71D01-59C7-48DA-B087-DDEEBA3C5DAD",
+      "accountNumber": "3000",
+      "name": "Direction",
+      "lineItems": [
+        {
+          "id": "882A3672-28FC-4EC4-B922-10907768F0BF",
+          "description": "Director",
+          "estimated": 45000.0,
+          "actual": 20000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "77E31CC7-3D31-4393-A651-3E661AC0BAED",
+          "description": "1st Assistant Director",
+          "estimated": 18000.0,
+          "actual": 8000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "F0A21741-7E3B-473C-81D3-48754B662959",
+          "description": "2nd Assistant Director",
+          "estimated": 12000.0,
+          "actual": 5000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "32CD5833-879B-4AC9-A0EF-0328D8E74077",
+      "accountNumber": "4000",
+      "name": "Cast",
+      "lineItems": [
+        {
+          "id": "2E56FDEB-91F7-4B31-823A-43A87BAD33ED",
+          "description": "Lead Actors",
+          "estimated": 80000.0,
+          "actual": 40000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "F7ECB7BD-6B2E-4DBF-9E1C-92C84D259478",
+          "description": "Supporting Actors",
+          "estimated": 35000.0,
+          "actual": 15000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "B4B0C2A0-3829-4F2B-B3EC-58B6D57326BE",
+          "description": "Day Players",
+          "estimated": 15000.0,
+          "actual": 6000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "6F183688-2B4C-4371-B67C-EB1432BF07DB",
+          "description": "Extras / Background",
+          "estimated": 8000.0,
+          "actual": 3000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "7EC05E92-A7AB-4B3A-8696-C0915A0A7D22",
+          "description": "Stunt Coordinator",
+          "estimated": 6000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "B90AB306-91D7-433C-8AE8-192C01AEF119",
+          "description": "Stunt Performers",
+          "estimated": 10000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "B3F0AB98-8E24-4FEE-875B-8AB7C167A0EF",
+      "accountNumber": "5000",
+      "name": "Production Staff",
+      "lineItems": [
+        {
+          "id": "5A13A04F-B22C-4448-834B-C6D7CC5F520A",
+          "description": "Production Manager",
+          "estimated": 20000.0,
+          "actual": 9000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "F7983237-E571-496C-956B-52F5DA76BC3C",
+          "description": "Production Coordinator",
+          "estimated": 12000.0,
+          "actual": 6000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "F7676B1B-A61F-413B-B152-0633FD3E36CA",
+          "description": "Production Assistants",
+          "estimated": 9000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "CC60937A-6D54-401B-8229-4B26158FB800",
+          "description": "Script Supervisor",
+          "estimated": 7000.0,
+          "actual": 3000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "335D2280-AB64-4112-9FBC-0B6FE86AA099",
+          "description": "Set Medic / Safety Officer",
+          "estimated": 5000.0,
+          "actual": 2000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "0486CF88-D6A1-4FB0-8B5A-282F478B2776",
+      "accountNumber": "6000",
+      "name": "Camera",
+      "lineItems": [
+        {
+          "id": "E1B0844A-9890-41AA-925C-5C82BD247AD1",
+          "description": "Director of Photography",
+          "estimated": 30000.0,
+          "actual": 14000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "07C0DE35-AB5E-4879-BDB5-4F155D88EC28",
+          "description": "Camera Operator",
+          "estimated": 14000.0,
+          "actual": 6000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "97AB2DE1-B52E-4ADB-9A21-1A25C68F8BD1",
+          "description": "1st AC",
+          "estimated": 10000.0,
+          "actual": 4500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "2509F2DE-4E33-451B-A3AE-7D6BD1B044D0",
+          "description": "2nd AC",
+          "estimated": 8000.0,
+          "actual": 3500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "80DC6415-C43C-45C9-A6A2-871BF8949F0C",
+          "description": "DIT (Digital Imaging Technician)",
+          "estimated": 6000.0,
+          "actual": 2500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "C8D385CE-4414-4388-A5A3-7891D48E1BA7",
+          "description": "Camera Package Rental",
+          "estimated": 19000.0,
+          "actual": 19000.0,
+          "notes": "20-day rental from Local Camera House; includes backup body.",
+          "units": [
+            {
+              "id": "201080C6-F545-4D93-8B81-09E9DE4E0F97",
+              "description": "Camera Body (RED Komodo)",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 450.0,
+              "actualRate": 450.0
+            },
+            {
+              "id": "90E7A9F5-5337-46A3-877F-92523D6F12EF",
+              "description": "Lens Set (Cooke S4 Primes)",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 350.0,
+              "actualRate": 350.0
+            },
+            {
+              "id": "3C6380B1-0D81-468A-9329-FF2787DEBB23",
+              "description": "Support & Accessories",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 150.0,
+              "actualRate": 150.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9572227A-DA5E-45B5-AEA2-FCED255D3F5A",
+      "accountNumber": "7000",
+      "name": "Production Sound",
+      "lineItems": [
+        {
+          "id": "5A5DF4E9-8E86-4EC5-BAB7-306089B5320D",
+          "description": "Sound Mixer",
+          "estimated": 12000.0,
+          "actual": 5500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "DFFC8A34-3EFE-4AAB-91AB-EF8D200799D1",
+          "description": "Boom Operator",
+          "estimated": 8000.0,
+          "actual": 3500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "C344996A-972A-48F4-A446-EBE28D7C711D",
+          "description": "Production Sound Package Rental",
+          "estimated": 4000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": [
+            {
+              "id": "D1C3D91C-DF43-444F-ABA4-CFD75A4BBFA0",
+              "description": "Wireless Lav Kit",
+              "amount": 4.0,
+              "units": 20.0,
+              "rate": 25.0,
+              "actualRate": 25.0
+            },
+            {
+              "id": "5B80A4A6-76C2-46C6-A1C5-4A9884623A08",
+              "description": "Boom Pole & Shotgun Mic",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 40.0,
+              "actualRate": 40.0
+            },
+            {
+              "id": "46110091-96A2-49F2-A543-98AB334BF795",
+              "description": "Recorder / Field Mixer",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 60.0,
+              "actualRate": 60.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "77D9D519-8F8E-429B-9611-CAD3223C6E90",
+      "accountNumber": "8000",
+      "name": "Grip & Electric",
+      "lineItems": [
+        {
+          "id": "C6ABB85F-F15F-44D0-8878-DDEB44134C06",
+          "description": "Gaffer",
+          "estimated": 14000.0,
+          "actual": 6000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "8EE980B4-2C87-41BA-A74E-D6A9FF8B8729",
+          "description": "Key Grip",
+          "estimated": 14000.0,
+          "actual": 6000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "673B61F1-3363-4FEF-A6DF-ADEE5E9A5709",
+          "description": "Best Boy Electric",
+          "estimated": 9000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "55EB845A-3D8F-4E8C-8B66-0820F57658DC",
+          "description": "Best Boy Grip",
+          "estimated": 9000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "25658A6F-3435-4607-B3FB-1539AF83D6B0",
+          "description": "Lighting & Grip Package Rental",
+          "estimated": 23000.0,
+          "actual": 23000.0,
+          "notes": "",
+          "units": [
+            {
+              "id": "523192D1-2D46-49FB-88FA-7A88CAF6F47A",
+              "description": "Lighting Package",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 600.0,
+              "actualRate": 600.0
+            },
+            {
+              "id": "1D41235D-E18C-44BE-9956-E8682BEF9987",
+              "description": "Grip Package (Dolly, Track, Rigging)",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 400.0,
+              "actualRate": 400.0
+            },
+            {
+              "id": "98358EF7-32EA-4B80-8F50-D4C7B4908260",
+              "description": "Generator & Power Distro",
+              "amount": 1.0,
+              "units": 20.0,
+              "rate": 150.0,
+              "actualRate": 150.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2FA76839-AAFC-4D7D-BF98-5DA520A8709D",
+      "accountNumber": "8500",
+      "name": "Special Effects (Practical)",
+      "lineItems": [
+        {
+          "id": "CF493132-46AA-46E8-94B1-E0B8242D9AAC",
+          "description": "Special Effects Coordinator",
+          "estimated": 8000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "26D5380A-2482-43BF-BC1B-59DA5E8E08F6",
+          "description": "Practical FX Rigs & Materials (pyro, rain, breakaway)",
+          "estimated": 12000.0,
+          "actual": 0.0,
+          "notes": "Pyro and rain rig scheduled for Week 4; not yet incurred.",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "95470B08-A081-4E8E-BABF-6BA3C2CB8591",
+      "accountNumber": "9000",
+      "name": "Art Department",
+      "lineItems": [
+        {
+          "id": "2B6748BD-B91F-43E3-AFC4-EEE54AF6DB24",
+          "description": "Production Designer",
+          "estimated": 18000.0,
+          "actual": 9000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "8497FF9C-FF4A-4BA2-AE5F-09C1001FA0AC",
+          "description": "Art Director",
+          "estimated": 10000.0,
+          "actual": 5000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "5E72CAE6-EB29-46F3-8619-6F85640421ED",
+          "description": "Set Decorator",
+          "estimated": 9000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "E47214FC-25E8-4A19-A691-2504B97735FF",
+          "description": "Props Master",
+          "estimated": 7000.0,
+          "actual": 3500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "06F247B3-6BD6-481B-849D-95BE29C8E652",
+          "description": "Set Dressing & Props Purchases",
+          "estimated": 15000.0,
+          "actual": 8000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "CAF8171A-D7FB-4A12-B342-BB17BC064713",
+          "description": "Construction / Set Build Materials",
+          "estimated": 10000.0,
+          "actual": 6000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "FF933DAF-1859-4718-B352-15EDAA6CC3C0",
+      "accountNumber": "10000",
+      "name": "Wardrobe",
+      "lineItems": [
+        {
+          "id": "930AAF25-91AD-4EB1-B961-7E0A0FD84505",
+          "description": "Costume Designer",
+          "estimated": 9000.0,
+          "actual": 4500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "5476D9A3-7C07-48BF-A70C-21811A4844A4",
+          "description": "Wardrobe Supervisor",
+          "estimated": 6000.0,
+          "actual": 3000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "639DF72F-FA8D-4337-A426-4E776819C8ED",
+          "description": "Costume Purchases & Rentals",
+          "estimated": 8000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "7997413E-98C1-4942-B74D-94A7D3C5A731",
+      "accountNumber": "11000",
+      "name": "Makeup & Hair",
+      "lineItems": [
+        {
+          "id": "9017011C-CE63-4F36-97FA-2615DEEF36B3",
+          "description": "Key Makeup Artist",
+          "estimated": 7000.0,
+          "actual": 3500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "F04E2310-D5CC-4113-964A-AEC41A9CF996",
+          "description": "Key Hair Stylist",
+          "estimated": 6000.0,
+          "actual": 3000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "E320F64C-4AC9-4E64-A7F4-B7DA3EFC3AC4",
+          "description": "Makeup, Hair & SFX Makeup Supplies",
+          "estimated": 4000.0,
+          "actual": 2000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "9F041637-DE91-43EA-8965-B7C34086E9DF",
+      "accountNumber": "12000",
+      "name": "Transportation",
+      "lineItems": [
+        {
+          "id": "7C5CCD3E-4C8B-4EEC-AB25-A59D1BE78CAA",
+          "description": "Transportation Coordinator",
+          "estimated": 6000.0,
+          "actual": 2500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "B8A4F4CA-6437-4E13-92D5-94227A135318",
+          "description": "Picture Vehicle Rentals",
+          "estimated": 5000.0,
+          "actual": 2000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "41F5CB84-0138-4970-9687-AF7CC23196C4",
+          "description": "Production Vehicle Rentals (Vans/Grip Truck)",
+          "estimated": 9000.0,
+          "actual": 5000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "3AFCD959-BBF0-4765-B651-49F2056BCB3D",
+          "description": "Fuel",
+          "estimated": 3000.0,
+          "actual": 1800.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "21F806CC-18A6-4BB3-BC53-7C1C4A8ECB28",
+      "accountNumber": "13000",
+      "name": "Locations",
+      "lineItems": [
+        {
+          "id": "C56CBE7F-0573-4AA6-9B3F-AF6E851EB875",
+          "description": "Location Manager",
+          "estimated": 8000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "85FC5274-7272-458E-91FA-30F1B551CF18",
+          "description": "Location Fees",
+          "estimated": 20000.0,
+          "actual": 12000.0,
+          "notes": "3 practical locations + 1 studio day; contracts on file with production office.",
+          "units": []
+        },
+        {
+          "id": "676F5FC1-1411-420A-B9DB-168F764EDAAC",
+          "description": "Location Permits",
+          "estimated": 4000.0,
+          "actual": 2500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "B2478C23-E888-42BC-A1E6-F132E458E2B3",
+          "description": "Security / Police & Fire Safety",
+          "estimated": 5000.0,
+          "actual": 2000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "C5AF99B2-BFFE-4B50-A97A-12E3FA04B5DF",
+      "accountNumber": "14000",
+      "name": "Production Film & Lab",
+      "lineItems": [
+        {
+          "id": "8D9F7730-4A59-4375-8E02-4B1D8E0121E5",
+          "description": "Digital Storage / Media Cards",
+          "estimated": 3000.0,
+          "actual": 3000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "15BA49E5-4C86-429D-A32F-E946A7080553",
+          "description": "Data Management & DIT Cart",
+          "estimated": 4000.0,
+          "actual": 2000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "3FDE7979-F197-4492-9A81-EEED96F04B81",
+          "description": "Dailies / Screener Prep",
+          "estimated": 2000.0,
+          "actual": 1000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "D5355723-22A7-455C-8061-7B522AE79CDD",
+      "accountNumber": "15000",
+      "name": "Editorial",
+      "lineItems": [
+        {
+          "id": "2EEC28ED-F645-4830-941B-11EDCBFD78CD",
+          "description": "Editor",
+          "estimated": 25000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "2745702A-08DB-4B77-936E-6C55270EDA20",
+          "description": "Assistant Editor",
+          "estimated": 10000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "E682EE59-163D-42A5-AE25-83A94853CE25",
+          "description": "Post-Production Supervisor",
+          "estimated": 8000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "49E6F08E-7BE4-4886-94E0-DFD6A642F616",
+          "description": "Editing System & Storage Rental",
+          "estimated": 6000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "7946672C-407F-437E-A3A9-D8723D6456DC",
+      "accountNumber": "15100",
+      "name": "Visual Effects",
+      "lineItems": [
+        {
+          "id": "B3C5B8EE-5677-4FC8-9D0C-9F59A271D062",
+          "description": "VFX Supervisor",
+          "estimated": 10000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "A8B2C7C5-2D80-49F3-9AAB-93180A855923",
+          "description": "VFX Artists / Vendor Bids",
+          "estimated": 32000.0,
+          "actual": 0.0,
+          "notes": "Bid from vendor pending final shot count confirmation after picture lock.",
+          "units": [
+            {
+              "id": "4F13AC01-BEB5-4C35-8752-7F33A12B12E7",
+              "description": "VFX Shots - Simple Cleanup",
+              "amount": 25.0,
+              "units": 1.0,
+              "rate": 300.0,
+              "actualRate": 0.0
+            },
+            {
+              "id": "9706B934-1861-4B8A-A53F-8A6B5A7F25A5",
+              "description": "VFX Shots - Complex Composite",
+              "amount": 10.0,
+              "units": 1.0,
+              "rate": 1200.0,
+              "actualRate": 0.0
+            },
+            {
+              "id": "EF831FDD-C428-4D9C-B5AB-F8382C7CE5D2",
+              "description": "VFX Shots - CG / 3D Element",
+              "amount": 5.0,
+              "units": 1.0,
+              "rate": 2500.0,
+              "actualRate": 0.0
+            }
+          ]
+        },
+        {
+          "id": "7AFE748D-7FAB-4F1D-8B79-7BDEF73F2696",
+          "description": "Previsualization (Previs)",
+          "estimated": 4000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ],
+      "contingencyPercentage": 15.0
+    },
+    {
+      "id": "0079B319-A1C0-422D-AE6C-BE65E2E5B68E",
+      "accountNumber": "15200",
+      "name": "Post-Production Sound",
+      "lineItems": [
+        {
+          "id": "930EDEDA-8532-4E2F-89A2-DDC4ECAC1A1E",
+          "description": "Supervising Sound Editor",
+          "estimated": 9000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "DEBEC0B2-B4F5-46CA-B867-19A3F96783D8",
+          "description": "Dialogue Editor",
+          "estimated": 6000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "7C294BA7-2F0D-4995-A942-8A26BE3AB948",
+          "description": "ADR Recording & Editing",
+          "estimated": 5000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "EFBB97BB-00CC-4664-8D5F-BEB029B1CA16",
+          "description": "Foley Artist & Stage",
+          "estimated": 6000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "7DCB5DF6-3FCA-4FCA-A67B-1489B4DD8E46",
+          "description": "Sound Design",
+          "estimated": 8000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "E585C85F-7F71-479B-A98C-C7961C7E313C",
+          "description": "Re-Recording Mix (Dub Stage)",
+          "estimated": 12000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "C4746281-CFED-4430-8355-C63A930B13DA",
+      "accountNumber": "15300",
+      "name": "Music",
+      "lineItems": [
+        {
+          "id": "A253E82E-4050-40F8-BF06-3EE4682E11C2",
+          "description": "Composer",
+          "estimated": 15000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "77B9B69C-31D1-44A8-A8D0-992CF81F51E2",
+          "description": "Music Supervisor",
+          "estimated": 6000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "A878C39B-8507-4582-97E8-5364C4AE7C16",
+          "description": "Score Recording & Musicians",
+          "estimated": 8000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "A6885D6C-0015-4DB5-9407-2C8D0AD01789",
+          "description": "Music Licensing (Needle-drops)",
+          "estimated": 5000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "9F19DBCB-C6B7-495F-941A-FE89D23EAEA4",
+      "accountNumber": "15400",
+      "name": "Titles, Graphics & Color",
+      "lineItems": [
+        {
+          "id": "58B601F5-DCFD-407A-B499-7E38FBCAC758",
+          "description": "Main & End Titles Design",
+          "estimated": 4000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "95870720-8AF2-4C34-B9AF-95C84BD034AA",
+          "description": "Motion Graphics",
+          "estimated": 3000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "8DD43C29-EB50-4F82-930D-1F39A3FE7E78",
+          "description": "Colorist / DI Grading Suite",
+          "estimated": 12000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "2FEE5B90-90C3-42C9-B727-F6E7A5927AE2",
+      "accountNumber": "15500",
+      "name": "Deliverables & Mastering",
+      "lineItems": [
+        {
+          "id": "52D7FD46-35AB-4D4E-943F-327B74F6C608",
+          "description": "DCP Creation",
+          "estimated": 3000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "0A47FFD2-FD59-47BD-AB3C-5CB3BC017BF6",
+          "description": "Mastering (ProRes / IMF Package)",
+          "estimated": 2500.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "AAEDF9D8-8CD1-4349-ADC2-3FD2B0F05A44",
+          "description": "Closed Captioning & Subtitling",
+          "estimated": 2000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "D0B5CA9B-2878-4138-88E0-AF888D2E7DBC",
+          "description": "Quality Control (QC)",
+          "estimated": 1500.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "FA9771B5-9CE4-48F3-AF17-4CDEFF027841",
+      "accountNumber": "16000",
+      "name": "Insurance & Legal",
+      "lineItems": [
+        {
+          "id": "3F2F5531-45E5-41C3-8D4C-545F13F3EA97",
+          "description": "Production Insurance",
+          "estimated": 15000.0,
+          "actual": 15000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "FF93BAF1-82F0-48D3-AF5D-4CCADDD2B1BB",
+          "description": "Errors & Omissions (E&O) Insurance",
+          "estimated": 6000.0,
+          "actual": 6000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "A24ADC4C-33FD-4C85-B9DD-49BD01BA1D4D",
+          "description": "Legal Fees",
+          "estimated": 10000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "BC5F5D5D-B068-4223-BEDE-024D9698E059",
+          "description": "Clearance Fees (Music / Footage / Trademark)",
+          "estimated": 3000.0,
+          "actual": 1000.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "156D439E-34DD-4969-B6AF-20784E0EF0D7",
+      "accountNumber": "17000",
+      "name": "Publicity & Marketing",
+      "lineItems": [
+        {
+          "id": "8308FD45-FB2D-41D6-BFCC-1736E2E0E2DF",
+          "description": "Unit Publicist",
+          "estimated": 5000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "ED4073CE-DE58-461D-9125-3111DF8A6D1F",
+          "description": "Still Photographer",
+          "estimated": 3000.0,
+          "actual": 1500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "86D9404F-1E2A-4476-8D21-AF62CD523EA5",
+          "description": "EPK / BTS Videographer",
+          "estimated": 3000.0,
+          "actual": 1500.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "10491F47-4B8A-4CB9-ACA3-85C53B7D9AE7",
+          "description": "Festival Submission Fees",
+          "estimated": 3000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "4663F0AC-97A3-4A7C-9157-84FE9CBBA454",
+          "description": "Poster & Key Art Design",
+          "estimated": 2500.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "81964D9B-B742-4FDD-95B0-FBBEBDBF2F64",
+      "accountNumber": "18000",
+      "name": "General Expenses",
+      "lineItems": [
+        {
+          "id": "FEF7BEF2-092A-4EF5-AC6E-C9A148D1E10D",
+          "description": "Office Rental",
+          "estimated": 6000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "2C22DD68-6EF8-4DF6-97F9-F79E2B241B22",
+          "description": "Office Supplies",
+          "estimated": 2000.0,
+          "actual": 1200.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "CD0B41BC-DCF8-4DC4-BEA3-16F57EFCFFEF",
+          "description": "Phone & Internet",
+          "estimated": 1500.0,
+          "actual": 1000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "6AFA58CE-39E0-4E79-92B4-50E25DEEFF19",
+          "description": "Catering",
+          "estimated": 18000.0,
+          "actual": 9000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "2D3D3B19-6F22-441D-BA5D-D6A3E6410AAE",
+          "description": "Craft Services",
+          "estimated": 8000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": []
+        },
+        {
+          "id": "C314794E-59BF-4546-874C-D06F11C691A5",
+          "description": "Wrap Party",
+          "estimated": 3000.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": []
+        }
+      ]
+    },
+    {
+      "id": "1151FDCE-83C8-49AC-99F3-3C559786318A",
+      "accountNumber": "19000",
+      "name": "Contingency",
+      "lineItems": [
+        {
+          "id": "6130ADAA-BC21-467C-B2BB-A1D9906DDADC",
+          "description": "Contingency (10%)",
+          "estimated": 107550.0,
+          "actual": 0.0,
+          "notes": "Standard 10% industry contingency; recalculated automatically from the subtotal.",
+          "units": []
+        }
+      ],
+      "isProjectContingency": true
+    }
+  ]
+}

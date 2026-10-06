@@ -9,55 +9,100 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var projectManager: ProjectManager
-    @State private var selectedCategoryID: UUID?
+    @StateObject private var calculatorPresenter = CalculatorPresenter()
     @State private var refreshTrigger = UUID()
-    
+
     var body: some View {
-        Group {
-            if let project = projectManager.currentProject {
-                HSplitView {
-                    // Left side: Top Sheet (50%)
-                    TopSheetView(
-                        project: Binding(
-                            get: { project },
-                            set: { projectManager.currentProject = $0 }
-                        ),
-                        selectedCategoryID: $selectedCategoryID,
-                        updateTrigger: refreshTrigger
-                    )
-                    .frame(minWidth: 350, idealWidth: 450, maxWidth: .infinity)
-                    
-                    // Right side: Category Detail (50%)
-                    ZStack {
-                        // Always present, but hidden
-                        CategoryDetailPlaceholder()
-                            .opacity(selectedCategoryID == nil ? 1 : 0)
-                        
-                        // Actual detail view
-                        if let selectedID = selectedCategoryID,
-                           let categoryIndex = project.categories.firstIndex(where: { $0.id == selectedID }) {
-                            CategoryDetailView(
-                                category: Binding(
-                                    get: { project.categories[categoryIndex] },
-                                    set: { newValue in
-                                        var updatedProject = project
-                                        updatedProject.categories[categoryIndex] = newValue
-                                        projectManager.currentProject = updatedProject
-                                        // Force contingency recalculation without full refresh
-                                        DispatchQueue.main.async {
-                                            refreshTrigger = UUID()
-                                        }
-                                    }
+        GeometryReader { geometry in
+            ZStack {
+                Group {
+                    if let project = projectManager.currentProject {
+                        HSplitView {
+                            // Left side: Top Sheet (50%)
+                            TopSheetView(
+                                project: Binding(
+                                    get: { project },
+                                    set: { projectManager.currentProject = $0 }
                                 ),
-                                currency: project.currency
+                                selectedCategoryID: $projectManager.selectedCategoryID,
+                                updateTrigger: refreshTrigger
                             )
-                            .transition(.opacity)
+                            .frame(minWidth: 350, idealWidth: 450, maxWidth: .infinity)
+
+                            // Right side: Category Detail (50%)
+                            ZStack {
+                                // Always present, but hidden
+                                CategoryDetailPlaceholder()
+                                    .opacity(projectManager.selectedCategoryID == nil ? 1 : 0)
+
+                                // Actual detail view
+                                if let selectedID = projectManager.selectedCategoryID,
+                                   let categoryIndex = project.categories.firstIndex(where: { $0.id == selectedID }) {
+                                    CategoryDetailView(
+                                        category: Binding(
+                                            get: { project.categories[categoryIndex] },
+                                            set: { newValue in
+                                                var updatedProject = project
+                                                updatedProject.categories[categoryIndex] = newValue
+                                                projectManager.currentProject = updatedProject
+                                                // Force contingency recalculation without full refresh
+                                                DispatchQueue.main.async {
+                                                    refreshTrigger = UUID()
+                                                }
+                                            }
+                                        ),
+                                        currency: project.currency
+                                    )
+                                    .transition(.opacity)
+                                }
+                            }
+                            .frame(minWidth: 350, idealWidth: 450, maxWidth: .infinity)
                         }
+                    } else {
+                        WelcomeView()
                     }
-                    .frame(minWidth: 350, idealWidth: 450, maxWidth: .infinity)
                 }
-            } else {
-                WelcomeView()
+                .environmentObject(calculatorPresenter)
+                // Blurring the actual content (rather than trying to blur "through" a
+                // translucent Material sibling, which samples unreliably against other
+                // SwiftUI views in the same ZStack) is what makes the app visible-but-soft
+                // behind the card, instead of the backdrop rendering as flat white.
+                .blur(radius: calculatorPresenter.active != nil ? 1 : 0)
+                .disabled(calculatorPresenter.active != nil)
+
+                // Window-spanning Unit Calculator overlay - see CalculatorPresenter for why
+                // this isn't a native .sheet().
+                if let request = calculatorPresenter.active {
+                    Color.black.opacity(0.12)
+                        .ignoresSafeArea()
+                        .onTapGesture { calculatorPresenter.dismiss() }
+
+                    UnitCalculatorView(
+                        // Built fresh here, reading/writing projectManager.currentProject
+                        // directly (not a captured project/category snapshot), so Done can
+                        // never overwrite the model with a stale copy - see CalculatorPresenter.
+                        lineItem: Binding<LineItem>(
+                            get: {
+                                projectManager.currentProject?
+                                    .categories.first(where: { $0.id == request.categoryID })?
+                                    .lineItems.first(where: { $0.id == request.lineItemID })
+                                ?? LineItem(description: "", estimated: 0, actual: 0)
+                            },
+                            set: { newValue in
+                                guard var project = projectManager.currentProject,
+                                      let categoryIndex = project.categories.firstIndex(where: { $0.id == request.categoryID }),
+                                      let lineItemIndex = project.categories[categoryIndex].lineItems.firstIndex(where: { $0.id == request.lineItemID })
+                                else { return }
+                                project.categories[categoryIndex].lineItems[lineItemIndex] = newValue
+                                projectManager.currentProject = project
+                            }
+                        ),
+                        currency: request.currency,
+                        mode: request.mode,
+                        maxSize: geometry.size,
+                        onDismiss: { calculatorPresenter.dismiss() }
+                    )
+                }
             }
         }
     }

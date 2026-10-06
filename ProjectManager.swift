@@ -13,7 +13,72 @@ import AppKit
 class ProjectManager: ObservableObject {
     @Published var currentProject: Project?
     @Published var currentFileURL: URL?
-    
+    @Published private(set) var recentFileURLs: [URL] = []
+
+    // Lives here (not as local @State in ContentView) so CineSpendApp.swift's .commands,
+    // which only has access to projectManager, can know which category the Category menu
+    // should act on.
+    @Published var selectedCategoryID: UUID?
+
+    // The app owns and exports this UTI (see Info.plist's UTExportedTypeDeclarations).
+    // Looking it up via UTType(filenameExtension:)! instead would force-unwrap a nil
+    // and crash if Launch Services hasn't (re)indexed the app yet - this exported-type
+    // initializer is non-failable and doesn't depend on that timing at all.
+    private static let cinespendType = UTType(exportedAs: "com.cinespend.project")
+
+    init() {
+        refreshRecentFiles()
+    }
+
+    // MARK: - Line Item Original Order
+    //
+    // A purely in-memory reference for the "#" column in CategoryDetailView: fixed at
+    // the moment a line item is first seen (file load, new project, or creation), and
+    // never updated afterward, so dragging/sorting a category's line items around never
+    // changes it - clicking the "#" header can always restore file order. Deliberately
+    // not part of Project/BudgetCategory/LineItem, so it never touches the file format.
+    @Published private(set) var lineItemOriginalOrder: [UUID: [UUID: Int]] = [:]
+
+    func recordOriginalOrderIfNeeded(categoryID: UUID, lineItemIDs: [UUID]) {
+        var perCategory = lineItemOriginalOrder[categoryID] ?? [:]
+        var nextOrder = (perCategory.values.max() ?? 0) + 1
+        for id in lineItemIDs where perCategory[id] == nil {
+            perCategory[id] = nextOrder
+            nextOrder += 1
+        }
+        lineItemOriginalOrder[categoryID] = perCategory
+    }
+
+    func originalOrder(categoryID: UUID, lineItemID: UUID) -> Int? {
+        lineItemOriginalOrder[categoryID]?[lineItemID]
+    }
+
+    private func recordOriginalOrder(for project: Project) {
+        lineItemOriginalOrder.removeAll()
+        for category in project.categories {
+            recordOriginalOrderIfNeeded(categoryID: category.id, lineItemIDs: category.lineItems.map(\.id))
+        }
+    }
+
+    // MARK: - Category-Scoped Actions
+    //
+    // Backs the "Category" menu bar commands, which only know the selected category's
+    // ID (via selectedCategoryID) rather than holding a Binding the way a view does.
+    // CategoryDetailView's own context menu toggles contingencyPercentage directly on
+    // its Binding<BudgetCategory> instead of going through these - same end effect.
+
+    var selectedCategory: BudgetCategory? {
+        guard let id = selectedCategoryID else { return nil }
+        return currentProject?.categories.first(where: { $0.id == id })
+    }
+
+    func setCategoryContingency(categoryID: UUID, enabled: Bool) {
+        guard var project = currentProject,
+              let index = project.categories.firstIndex(where: { $0.id == categoryID }) else { return }
+        project.categories[index].contingencyPercentage = enabled ? 10.0 : nil
+        currentProject = project
+    }
+
     // MARK: - Project Management
     
     func createNewProject() {
@@ -67,77 +132,245 @@ class ProjectManager: ObservableObject {
                 let newProject = Project(name: projectName, currency: selectedCurrency)
                 self.currentProject = newProject
                 self.currentFileURL = nil
+                self.recordOriginalOrder(for: newProject)
             }
         }
     }
     
+    /// Cmd+S. Writes to the already-open file, or falls through to Save As if this
+    /// project has never been saved.
     func saveCurrentProject() {
-        guard var project = currentProject else { return }
-        
-        project.updateModifiedDate()
-        currentProject = project
-        
+        guard let project = currentProject else { return }
         if let url = currentFileURL {
-            // Save to existing file
-            saveProject(project, to: url)
+            write(project, to: url)
         } else {
-            // Show save panel on main thread
-            DispatchQueue.main.async {
-                let panel = NSSavePanel()
-                panel.allowedContentTypes = [UTType(filenameExtension: "cinespend")!]
-                panel.nameFieldStringValue = project.name
-                panel.canCreateDirectories = true
-                
-                panel.begin { response in
-                    if response == .OK, let url = panel.url {
-                        self.saveProject(project, to: url)
-                        self.currentFileURL = url
+            saveCurrentProjectAs()
+        }
+    }
+
+    /// Cmd+Shift+S. Always prompts for a location, even if the project already has a file.
+    func saveCurrentProjectAs() {
+        guard let project = currentProject else { return }
+        DispatchQueue.main.async {
+            let panel = NSSavePanel()
+            panel.allowedContentTypes = [Self.cinespendType]
+            panel.nameFieldStringValue = project.name
+            panel.canCreateDirectories = true
+
+            panel.begin { response in
+                guard response == .OK, let url = panel.url else { return }
+                self.write(project, to: url)
+                self.currentFileURL = url
+            }
+        }
+    }
+
+    /// Discards in-memory changes and reloads currentFileURL from disk, after confirming.
+    func revertToSaved() {
+        guard let url = currentFileURL else { return }
+        DispatchQueue.main.async {
+            let alert = NSAlert()
+            alert.alertStyle = .warning
+            alert.messageText = "Revert to Saved?"
+            alert.informativeText = "This will discard any changes made since \u{201C}\(url.lastPathComponent)\u{201D} was last saved."
+            alert.addButton(withTitle: "Revert")
+            alert.addButton(withTitle: "Cancel")
+            guard alert.runModal() == .alertFirstButtonReturn else { return }
+            self.loadProject(from: url)
+        }
+    }
+
+    private func write(_ project: Project, to url: URL) {
+        var updated = project
+        updated.updateModifiedDate()
+        currentProject = updated
+
+        let didAccess = url.startAccessingSecurityScopedResource()
+        defer { if didAccess { url.stopAccessingSecurityScopedResource() } }
+
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let data = try encoder.encode(updated)
+            try data.write(to: url, options: .atomic)
+            noteRecentFile(url)
+        } catch {
+            presentError(title: "Couldn\u{2019}t Save \u{201C}\(updated.name)\u{201D}", error)
+        }
+    }
+
+    func openProject() {
+        DispatchQueue.main.async {
+            let panel = NSOpenPanel()
+            panel.allowedContentTypes = [Self.cinespendType]
+            panel.allowsMultipleSelection = false
+            panel.canChooseDirectories = false
+
+            panel.begin { response in
+                guard response == .OK, let url = panel.urls.first else { return }
+                self.loadProject(from: url)
+            }
+        }
+    }
+
+    /// Also used by Open Recent and Revert to Saved, not just the Open panel.
+    func loadProject(from url: URL) {
+        let didAccess = url.startAccessingSecurityScopedResource()
+        defer { if didAccess { url.stopAccessingSecurityScopedResource() } }
+
+        do {
+            let data = try Data(contentsOf: url)
+            let decoded = try JSONDecoder().decode(Project.self, from: data)
+            let (project, migrated) = migrateLegacyContingency(decoded)
+
+            currentFileURL = url
+            recordOriginalOrder(for: project)
+            noteRecentFile(url)
+
+            if migrated {
+                // Upgrades the file on disk right away, so this heuristic only ever
+                // has to run once per file - every later open sees isProjectContingency
+                // already set correctly and doesn't need to guess from accountNumber.
+                write(project, to: url)
+            } else {
+                currentProject = project
+            }
+        } catch {
+            presentError(title: "Couldn\u{2019}t Open \u{201C}\(url.lastPathComponent)\u{201D}", error)
+        }
+    }
+
+    // MARK: - Legacy Migration
+    //
+    // BudgetCategory.isProjectContingency didn't exist before this file format version;
+    // its custom decoder (see Models.swift) tolerates a missing key by defaulting to
+    // false so old files decode at all, but that alone would silently lose which
+    // category used to be the contingency. This recovers it using the old convention
+    // (accountNumber == "19000") - only as a one-time migration, never as ongoing
+    // identification - and the caller resaves immediately so it doesn't need to run again.
+
+    private func migrateLegacyContingency(_ project: Project) -> (Project, migrated: Bool) {
+        var project = project
+        guard !project.categories.contains(where: { $0.isProjectContingency }),
+              let legacyIndex = project.categories.firstIndex(where: { $0.accountNumber == "19000" })
+        else { return (project, false) }
+
+        project.categories[legacyIndex].isProjectContingency = true
+        return (project, true)
+    }
+
+    // MARK: - Recent Files
+    //
+    // NSDocumentController's recent-documents list is the standard, Apple-provided
+    // mechanism for this - it persists across launches and correctly handles sandboxed
+    // security-scoped access on its own, so there's no bookmark bookkeeping to hand-roll.
+    // Mirrored into a @Published property so SwiftUI's Commands (which observe
+    // ProjectManager) rebuild the Open Recent menu reactively.
+
+    private func refreshRecentFiles() {
+        recentFileURLs = NSDocumentController.shared.recentDocumentURLs
+    }
+
+    private func noteRecentFile(_ url: URL) {
+        NSDocumentController.shared.noteNewRecentDocumentURL(url)
+        refreshRecentFiles()
+    }
+
+    func clearRecentFiles() {
+        NSDocumentController.shared.clearRecentDocuments(nil)
+        refreshRecentFiles()
+    }
+
+    private func presentError(title: String, _ error: Error) {
+        DispatchQueue.main.async {
+            let alert = NSAlert()
+            alert.alertStyle = .warning
+            alert.messageText = title
+            alert.informativeText = error.localizedDescription
+            alert.runModal()
+        }
+    }
+    
+    // MARK: - Spreadsheet Export
+
+    private static let xlsxType = UTType(importedAs: "org.openxmlformats.spreadsheetml.sheet")
+
+    // Order here is also the order/default shown in the export panel's Format popup.
+    private static let spreadsheetFormatOrder: [SpreadsheetFormat] = [.xlsx, .csv, .json]
+
+    private static func contentType(for format: SpreadsheetFormat) -> UTType {
+        switch format {
+        case .csv: return .commaSeparatedText
+        case .xlsx: return xlsxType
+        case .json: return .json
+        }
+    }
+
+    // NSPopUpButton's target is weak, so this needs a strong owner for the panel's
+    // lifetime. ProjectManager isn't NSObject-derived (it's an ObservableObject), so
+    // the @objc action target has to live on a small helper object instead.
+    private final class SpreadsheetFormatPicker: NSObject {
+        let panel: NSSavePanel
+        let formats: [SpreadsheetFormat]
+
+        init(panel: NSSavePanel, formats: [SpreadsheetFormat]) {
+            self.panel = panel
+            self.formats = formats
+        }
+
+        @objc func formatChanged(_ sender: NSPopUpButton) {
+            let format = formats[sender.indexOfSelectedItem]
+            panel.allowedContentTypes = [ProjectManager.contentType(for: format)]
+        }
+    }
+
+    private var spreadsheetFormatPicker: SpreadsheetFormatPicker?
+
+    func exportToSpreadsheet() {
+        guard let project = currentProject else { return }
+
+        DispatchQueue.main.async {
+            let panel = NSSavePanel()
+            let formats = Self.spreadsheetFormatOrder
+            panel.allowedContentTypes = [Self.contentType(for: formats[0])]
+            panel.nameFieldStringValue = project.name
+            panel.canCreateDirectories = true
+
+            let accessoryView = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: 30))
+            let label = NSTextField(labelWithString: "Format:")
+            label.frame = NSRect(x: 0, y: 6, width: 50, height: 20)
+            accessoryView.addSubview(label)
+
+            let popup = NSPopUpButton(frame: NSRect(x: 55, y: 2, width: 180, height: 25))
+            for format in formats {
+                popup.addItem(withTitle: format.displayName)
+            }
+            accessoryView.addSubview(popup)
+            panel.accessoryView = accessoryView
+
+            let picker = SpreadsheetFormatPicker(panel: panel, formats: formats)
+            self.spreadsheetFormatPicker = picker
+            popup.target = picker
+            popup.action = #selector(SpreadsheetFormatPicker.formatChanged(_:))
+
+            panel.begin { response in
+                guard response == .OK, let url = panel.url else { return }
+                let format = SpreadsheetFormat(rawValue: url.pathExtension.lowercased()) ?? formats[0]
+
+                DispatchQueue.global(qos: .userInitiated).async {
+                    let data = SpreadsheetExporter.export(project, format: format)
+                    do {
+                        try data.write(to: url)
+                    } catch {
+                        print("Error exporting spreadsheet: \(error)")
                     }
                 }
             }
         }
     }
-    
-    private func saveProject(_ project: Project, to url: URL) {
-        do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            let data = try encoder.encode(project)
-            try data.write(to: url)
-        } catch {
-            print("Error saving project: \(error)")
-        }
-    }
-    
-    func openProject() {
-        DispatchQueue.main.async {
-            let panel = NSOpenPanel()
-            panel.allowedContentTypes = [UTType(filenameExtension: "cinespend")!]
-            panel.allowsMultipleSelection = false
-            panel.canChooseDirectories = false
-            
-            panel.begin { response in
-                if response == .OK, let url = panel.urls.first {
-                    self.loadProject(from: url)
-                }
-            }
-        }
-    }
-    
-    private func loadProject(from url: URL) {
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            let project = try decoder.decode(Project.self, from: data)
-            currentProject = project
-            currentFileURL = url
-        } catch {
-            print("Error loading project: \(error)")
-        }
-    }
-    
+
     // MARK: - PDF Export
-    
+
     func exportToPDF() {
         guard let project = currentProject else { return }
         
@@ -233,12 +466,12 @@ class ProjectManager: ObservableObject {
         y -= 15  // Increased from 10 to 15 for more spacing
         
         // Categories (excluding contingency)
-        let subtotalEstimated = project.categories.filter { $0.accountNumber != "19000" }.reduce(0) { $0 + $1.totalEstimated }
-        let subtotalActual = project.categories.filter { $0.accountNumber != "19000" }.reduce(0) { $0 + $1.totalActual }
+        let subtotalEstimated = project.categories.filter { !$0.isProjectContingency }.reduce(0) { $0 + $1.totalEstimated }
+        let subtotalActual = project.categories.filter { !$0.isProjectContingency }.reduce(0) { $0 + $1.totalActual }
         let subtotalRemaining = subtotalEstimated - subtotalActual
-        
+
         for category in project.categories {
-            if category.accountNumber == "19000" { continue } // Skip contingency - show separately
+            if category.isProjectContingency { continue } // Skip contingency - show separately
             if y < margin + 100 { break } // Stop if we're running out of space
             
             drawText(category.accountNumber, at: CGPoint(x: margin, y: y), fontSize: 10, in: context)
@@ -261,13 +494,13 @@ class ProjectManager: ObservableObject {
         y -= 15
         
         // Contingency (dynamic %)
-        if let contingency = project.categories.first(where: { $0.accountNumber == "19000" }) {
-            let percentText = project.contingencyPercentage == floor(project.contingencyPercentage) 
+        if let contingency = project.categories.first(where: { $0.isProjectContingency }) {
+            let percentText = project.contingencyPercentage == floor(project.contingencyPercentage)
                 ? String(format: "%.0f", project.contingencyPercentage)
                 : String(format: "%.1f", project.contingencyPercentage)
-            
-            drawText("19000", at: CGPoint(x: margin, y: y), fontSize: 10, in: context)
-            drawText("Contingency (\(percentText)%)", at: CGPoint(x: margin + 60, y: y), fontSize: 10, in: context)
+
+            drawText(contingency.accountNumber, at: CGPoint(x: margin, y: y), fontSize: 10, in: context)
+            drawText("\(contingency.name) (\(percentText)%)", at: CGPoint(x: margin + 60, y: y), fontSize: 10, in: context)
             drawText(formatCurrency(contingency.totalEstimated, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 240, y: y), fontSize: 10, in: context)
             drawText(formatCurrency(contingency.totalActual, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 160, y: y), fontSize: 10, in: context)
             drawText(formatCurrency(contingency.totalRemaining, currency: project.currency), at: CGPoint(x: pageSize.width - margin - 80, y: y), fontSize: 10, in: context)

@@ -37,20 +37,55 @@ struct CineSpendApp: App {
                     projectManager.createNewProject()
                 }
                 .keyboardShortcut("n", modifiers: .command)
-                
+
                 Button("Open Project...") {
                     projectManager.openProject()
                 }
                 .keyboardShortcut("o", modifiers: .command)
-                
+
+                Menu("Open Recent") {
+                    ForEach(projectManager.recentFileURLs, id: \.self) { url in
+                        Button(url.deletingPathExtension().lastPathComponent) {
+                            projectManager.loadProject(from: url)
+                        }
+                    }
+                    if !projectManager.recentFileURLs.isEmpty {
+                        Divider()
+                        Button("Clear Menu") {
+                            projectManager.clearRecentFiles()
+                        }
+                    }
+                }
+            }
+
+            CommandGroup(replacing: .saveItem) {
                 Button("Save Project") {
                     projectManager.saveCurrentProject()
                 }
                 .keyboardShortcut("s", modifiers: .command)
                 .disabled(projectManager.currentProject == nil)
+
+                Button("Save Project As...") {
+                    projectManager.saveCurrentProjectAs()
+                }
+                .keyboardShortcut("s", modifiers: [.command, .shift])
+                .disabled(projectManager.currentProject == nil)
+
+                Divider()
+
+                Button("Revert to Saved") {
+                    projectManager.revertToSaved()
+                }
+                .disabled(projectManager.currentFileURL == nil)
             }
-            
+
             CommandGroup(after: .importExport) {
+                Button("Export Spreadsheet...") {
+                    projectManager.exportToSpreadsheet()
+                }
+                .keyboardShortcut("e", modifiers: [.command, .option])
+                .disabled(projectManager.currentProject == nil)
+
                 Button("Export PDF...") {
                     projectManager.exportToPDF()
                 }
@@ -58,6 +93,18 @@ struct CineSpendApp: App {
                 .disabled(projectManager.currentProject == nil)
             }
             
+            CommandMenu("Category") {
+                Toggle("Enable Category Contingency", isOn: Binding(
+                    get: { projectManager.selectedCategory?.contingencyPercentage != nil },
+                    set: { enabled in
+                        guard let id = projectManager.selectedCategoryID else { return }
+                        projectManager.setCategoryContingency(categoryID: id, enabled: enabled)
+                    }
+                ))
+                .keyboardShortcut("c", modifiers: [.command, .shift])
+                .disabled(projectManager.selectedCategory == nil)
+            }
+
             CommandMenu("Appearance") {
                 Button("Light Mode") {
                     colorScheme = .light

@@ -1,0 +1,167 @@
+{
+  "id": "09A75478-4D26-4663-B215-BCE9359A599F",
+  "name": "Doc Spec Test Budget",
+  "currency": "USD",
+  "preparedBy": "Spec-Only Generator",
+  "contingencyPercentage": 10.0,
+  "dateCreated": 807717600.0,
+  "dateModified": 807717600.0,
+  "categories": [
+    {
+      "id": "48E2E373-1B34-40B9-A7C1-CC8E078802DC",
+      "accountNumber": "1000",
+      "name": "Story & Rights",
+      "lineItems": [
+        {
+          "id": "E9F88AA9-572D-4507-AA03-3FA55F23DA49",
+          "description": "Story Rights Purchase",
+          "estimated": 5000.0,
+          "actual": 5000.0,
+          "notes": "",
+          "units": [
+            {
+              "id": "DCD9E14E-0D6F-4308-B1D2-7364EB5FEDF7",
+              "description": "Story Rights Purchase",
+              "amount": 1,
+              "units": 1,
+              "rate": 5000,
+              "actualRate": 5000
+            }
+          ]
+        },
+        {
+          "id": "A6E05D55-2D86-4F09-9CB8-B34C28F88E8A",
+          "description": "Screenplay",
+          "estimated": 12000.0,
+          "actual": 6000.0,
+          "notes": "First draft delivered; second draft in progress.",
+          "units": [
+            {
+              "id": "23D74E99-FD71-494E-A86D-06B16D9FDE82",
+              "description": "Writer Fee",
+              "amount": 1,
+              "units": 1,
+              "rate": 12000,
+              "actualRate": 6000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E650DABC-ED78-445A-8A19-344DABE1928E",
+      "accountNumber": "6000",
+      "name": "Camera",
+      "lineItems": [
+        {
+          "id": "2C75F8DC-7254-4DA3-ABC5-E46CB92F72D4",
+          "description": "Director of Photography",
+          "estimated": 9000.0,
+          "actual": 4000.0,
+          "notes": "",
+          "units": [
+            {
+              "id": "481C7F96-EBFB-49ED-88FF-42FC1ADE95D2",
+              "description": "Director of Photography",
+              "amount": 1,
+              "units": 10,
+              "rate": 900,
+              "actualRate": 400
+            }
+          ]
+        },
+        {
+          "id": "E3196CC9-2702-4485-8809-70DED9B282A5",
+          "description": "Camera Package Rental",
+          "estimated": 5000.0,
+          "actual": 4800.0,
+          "notes": "Lens kit actually billed at a lower day rate than quoted.",
+          "units": [
+            {
+              "id": "C73E8FB0-B190-48EB-A579-D606510055CA",
+              "description": "Camera Body",
+              "amount": 1,
+              "units": 10,
+              "rate": 300,
+              "actualRate": 300
+            },
+            {
+              "id": "97F1D2C3-3936-45D2-86C6-877765CD6BB5",
+              "description": "Lens Kit",
+              "amount": 1,
+              "units": 10,
+              "rate": 200,
+              "actualRate": 180
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B33080BE-6727-43DF-A8BB-97B114D0FAEF",
+      "accountNumber": "18000",
+      "name": "General Expenses",
+      "lineItems": [
+        {
+          "id": "EC71A717-3EC7-4ECB-A201-57BCF9691485",
+          "description": "Office Supplies",
+          "estimated": 800.0,
+          "actual": 800.0,
+          "notes": "",
+          "units": [
+            {
+              "id": "F22F1E3A-58BC-452A-9B3C-CA945F6BC95A",
+              "description": "Office Supplies",
+              "amount": 1,
+              "units": 1,
+              "rate": 800,
+              "actualRate": 800
+            }
+          ]
+        },
+        {
+          "id": "485A7581-F44E-4E31-AA7B-831C5984BA21",
+          "description": "Catering",
+          "estimated": 3000.0,
+          "actual": 1200.0,
+          "notes": "",
+          "units": [
+            {
+              "id": "64AB1BFC-F53B-439D-8BFD-7FF6EECA176D",
+              "description": "Catering",
+              "amount": 1,
+              "units": 1,
+              "rate": 3000,
+              "actualRate": 1200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B7416C91-B97D-4141-BC47-FFAF8B633721",
+      "accountNumber": "19000",
+      "name": "Contingency",
+      "lineItems": [
+        {
+          "id": "CC2DE718-3D28-4420-A914-C3C2D7487E62",
+          "description": "Contingency (10%)",
+          "estimated": 3480.0,
+          "actual": 0.0,
+          "notes": "",
+          "units": [
+            {
+              "id": "274A387B-B14D-41C6-901F-89966C915CC3",
+              "description": "Contingency (10%)",
+              "amount": 1,
+              "units": 1,
+              "rate": 3480,
+              "actualRate": 0
+            }
+          ]
+        }
+      ],
+      "isProjectContingency": true
+    }
+  ]
+}
